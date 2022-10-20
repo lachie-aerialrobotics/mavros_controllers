@@ -76,7 +76,7 @@ geometricCtrl::geometricCtrl(const ros::NodeHandle &nh, const ros::NodeHandle &n
   target_pose_pub_ = nh_.advertise<geometry_msgs::PoseStamped>("mavros/setpoint_position/local", 10);
   posehistoryPub_ = nh_.advertise<nav_msgs::Path>("geometric_controller/path", 10);
   systemstatusPub_ = nh_.advertise<mavros_msgs::CompanionProcessStatus>("mavros/companion_process/status", 1);
-  arming_client_ = nh_.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
+  // arming_client_ = nh_.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
   set_mode_client_ = nh_.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
   land_service_ = nh_.advertiseService("land", &geometricCtrl::landCallback, this);
 
@@ -268,8 +268,8 @@ void geometricCtrl::statusloopCallback(const ros::TimerEvent &event) {
   if (sim_enable_) {
     // Enable OFFBoard mode and arm automatically
     // This will only run if the vehicle is simulated
-    arm_cmd_.request.value = true;
-    offb_set_mode_.request.custom_mode = "OFFBOARD";
+    // arm_cmd_.request.value = true;
+    // offb_set_mode_.request.custom_mode = "OFFBOARD";
     if (current_state_.mode != "OFFBOARD" && (ros::Time::now() - last_request_ > ros::Duration(5.0))) {
       if (set_mode_client_.call(offb_set_mode_) && offb_set_mode_.response.mode_sent) {
         ROS_INFO("Offboard enabled");
